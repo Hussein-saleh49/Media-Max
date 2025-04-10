@@ -1,0 +1,154 @@
+/* إعدادات عامة */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+}
+
+/* شريط العنوان (Header) */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background-color: #00796b;
+    color: white;
+}
+
+.header .location p,
+.header .search-bar {
+    margin: 0;
+}
+
+.header button,
+.header .search-bar button {
+    background-color: #004d40;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.header .search-bar {
+    display: flex;
+    align-items: center;
+}
+
+.header .search-bar input {
+    padding: 8px;
+    border: none;
+    border-radius: 4px 0 0 4px;
+    outline: none;
+}
+
+.header .search-bar button {
+    border-radius: 0 4px 4px 0;
+}
+
+/* رسالة الترحيب */
+.welcome {
+    text-align: center;
+    padding: 20px;
+    background-color: #e0f2f1;
+    color: #00796b;
+}
+
+/* الأيقونات والخدمات */
+.services {
+    display: flex;
+    justify-content: space-around;
+    padding: 20px;
+    background-color: white;
+}
+
+.services .icon {
+    text-align: center;
+    cursor: pointer;
+}
+
+.services .icon img {
+    width: 50px;
+    height: 50px;
+    margin-bottom: 10px;
+}
+
+.services .icon span {
+    display: block;
+    color: #00796b;
+}
+
+/* شراء الأدوية بوصفة رقمية */
+.digital-prescription {
+    text-align: center;
+    padding: 20px;
+    background-color: #f1f8e9;
+    color: #33691e;
+}
+
+.digital-prescription button {
+    background-color: #689f38;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+/* الصيدليات القريبة */
+.nearby-pharmacies {
+    padding: 20px;
+    background-color: white;
+}
+
+.nearby-pharmacies .pharmacy {
+    border: 1px solid #e0e0e0;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+}
+
+.nearby-pharmacies .pharmacy p {
+    margin: 5px 0;
+}
+
+/* زر "شاهد الكل" */
+.see-all {
+    text-align: center;
+    padding: 20px;
+}
+
+.see-all button {
+    background-color: #00796b;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+/* تصميم متجاوب */
+@media (max-width: 768px) {
+    .header, .services, .digital-prescription, .nearby-pharmacies, .see-all {
+        padding: 15px;
+    }
+
+    .services {
+        flex-wrap: wrap;
+        justify-content: space-around;
+    }
+
+    .services .icon {
+        margin: 10px 0;
+    }
+
+    .header .location p,
+    .header .search-bar {
+        font-size: 14px;
+    }
+
+    .header .search-bar input {
+        width: 100px;
+    }
+}
