@@ -1,0 +1,15 @@
+-- كرر هذا البلوك لكل صيدلية مع تعديل رقم الصيدلية يدوياً (مثلاً من 1 إلى 10)
+-- الصيدلية رقم 1
+INSERT INTO medication_pharmacy (medication_id, pharmacy_id, stock, price, created_at, updated_at)
+SELECT
+    FLOOR(1 + (RAND() * 100)) AS medication_id, -- id من 1 إلى 100
+    1 AS pharmacy_id,
+    FLOOR(10 + (RAND() * 90)) AS stock,         -- الكمية من 10 إلى 100
+    ROUND(10 + (RAND() * 90), 2) AS price,      -- السعر من 10 إلى 100 جنيه
+    NOW(), NOW()
+FROM (
+    SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL SELECT 5
+    UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9 UNION ALL SELECT 10
+    UNION ALL SELECT 11 UNION ALL SELECT 12 UNION ALL SELECT 13 UNION ALL SELECT 14 UNION ALL SELECT 15
+    UNION ALL SELECT 16 UNION ALL SELECT 17 UNION ALL SELECT 18 UNION ALL SELECT 19 UNION ALL SELECT 20
+) AS temp;

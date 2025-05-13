@@ -1,0 +1,11 @@
+
+
+
+//
+$users = [
+    ['username' => 'ahmed_pharmacist', 'email' => 'ahmed.pharmacist@example.com', 'password' => 'password123'],
+    ['username' => 'esraa_pharmacist', 'email' => 'esraa.pharmacist@example.com', 'password' => 'esraa123'],
+    ['username' => 'sara_pharmacist', 'email' => 'sara.pharmacist@example.com', 'password' => 'sara123'],
+    ['username' => 'ebrhaim_pharmacist', 'email' => 'ebrhaim.pharmacist@example.com', 'password' => 'ebrhaim123'],
+    ['username' => 'khaled_pharmacist', 'email' => 'khaled.pharmacist@example.com', 'password' => 'khaled123']
+];

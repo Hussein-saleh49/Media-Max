@@ -1,0 +1,12 @@
+INSERT INTO drivers (name, email, phone, created_at, updated_at)
+VALUES
+('Ahmed Ali', 'ahmed.ali@example.com', '01012345678', NOW(), NOW()),
+('Mohamed Salah', 'mohamed.salah@example.com', '01098765432', NOW(), NOW()),
+('Sara Ahmed', 'sara.ahmed@example.com', '01234567890', NOW(), NOW()),
+('Ali Hassan', 'ali.hassan@example.com', '01122334455', NOW(), NOW()),
+('Mona Khaled', 'mona.khaled@example.com', '01554433211', NOW(), NOW()),
+('Hossam Omar', 'hossam.omar@example.com', '01055667788', NOW(), NOW()),
+('Yasmin Adel', 'yasmin.adel@example.com', '01266778899', NOW(), NOW()),
+('Tamer Gamal', 'tamer.gamal@example.com', '01122334477', NOW(), NOW()),
+('Nadia Said', 'nadia.said@example.com', '01012345567', NOW(), NOW()),
+('Khaled Ibrahim', 'khaled.ibrahim@example.com', '01287766554', NOW(), NOW());
