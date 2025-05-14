@@ -1,0 +1,82 @@
+version: "3.8"
+
+services:
+    # PHP + Apache Service
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: mediamax-app
+        restart: unless-stopped
+        working_dir: /var/www/html
+        volumes:
+            - .:/var/www/html
+        environment:
+            - DB_HOST=db
+            - DB_DATABASE=${DB_DATABASE:-mediamax}
+            - DB_USERNAME=${DB_USERNAME:-root}
+            - DB_PASSWORD=${DB_PASSWORD:-root}
+            - REDIS_HOST=redis
+        ports:
+            - "8080:80"
+        networks:
+            - mediamax-network
+        depends_on:
+            - db
+            - redis
+
+    # MySQL Service
+    db:
+        image: mysql:8.0
+        container_name: mediamax-db
+        restart: unless-stopped
+        environment:
+            MYSQL_DATABASE: ${DB_DATABASE:-mediamax}
+            MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-root}
+            MYSQL_ALLOW_EMPTY_PASSWORD: "no"
+            TZ: "Africa/Cairo"
+        command: --default-authentication-plugin=mysql_native_password --wait_timeout=86400 --interactive_timeout=86400 --max_allowed_packet=1073741824
+        volumes:
+            - dbdata:/var/lib/mysql
+            - ./docker/mysql/conf.d:/etc/mysql/conf.d
+        ports:
+            - "3306:3306"
+        networks:
+            - mediamax-network
+        healthcheck:
+            test:
+                [
+                    "CMD",
+                    "mysqladmin",
+                    "ping",
+                    "-h",
+                    "localhost",
+                    "-uroot",
+                    "-p${DB_PASSWORD:-root}",
+                ]
+            timeout: 5s
+            retries: 10
+
+    # Redis Service
+    redis:
+        image: redis:alpine
+        container_name: mediamax-redis
+        restart: unless-stopped
+        ports:
+            - "6379:6379"
+        volumes:
+            - redisdata:/data
+        networks:
+            - mediamax-network
+
+# Docker Networks
+networks:
+    mediamax-network:
+        driver: bridge
+
+# Volumes
+volumes:
+    dbdata:
+        driver: local
+    redisdata:
+        driver: local

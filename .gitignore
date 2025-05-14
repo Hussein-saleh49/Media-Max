@@ -1,18 +1,63 @@
-.phpunit.cache
-/node_modules
-/public/build
-/public/hot
-/public/storage
-/storage/*.key
-/vendor
+# Laravel 8+ default .gitignore
+
+# Vendor directories
+/vendor/
+
+# Node modules
+/node_modules/
+
+# Laravel 4 specific
+bootstrap/compiled.php
+app/storage/
+
+# Laravel 5 & Lumen specific
+database/*.sqlite
+database/*.sqlite-journal
+public/storage
+public/hot
+
+# Laravel 5 & Lumen specific with changed public path
+public_html/storage
+public_html/hot
+
+# Environment
 .env
-.env.backup
-.env.production
+.env.*.local
+.phpunit.result.cache
 Homestead.json
 Homestead.yaml
-auth.json
 npm-debug.log
 yarn-error.log
-/.fleet
-/.idea
-/.vscode
+
+# IDE specific files
+.idea
+.vscode
+*.sublime-project
+*.sublime-workspace
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Docker
+.docker-sync/
+.docker/
+
+# IDE
+.idea/
+
+# Local env files
+.env.local
+.env.*.local
+
+# Logs
+*.log
+
+# Laravel 8.x
+bootstrap/cache/
+storage/*.key
