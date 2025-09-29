@@ -11,6 +11,7 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DriverRatingController;
 use App\Http\Controllers\InfoController;
 use App\Http\Controllers\MedicationController;
+use App\Http\Controllers\PharmacyController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderDeliveryController;
 use App\Http\Controllers\PasswordResetController;
@@ -64,6 +65,7 @@ Route::get('/top-search', [MedicationController::class, 'topSearch']);
 //add medicine
 Route::middleware('auth:sanctum')->post('/medications', [MedicationController::class, 'store']);
 
+
 ////
 Route::post('/vouchers', [VoucherController::class, 'createVoucher']);
 ////
@@ -75,12 +77,12 @@ Route::post('/place-order', [OrderController::class, 'placeOrder']);
 //
 Route::post('/confirm-payment', [OrderController::class, 'confirmPayment']);
 
-Route::post('/info', [InfoController::class, 'store']);        // ✅ إضافة بيانات جديدة
-Route::get('/info/{type}', [InfoController::class, 'show']);   // ✅ عرض "من نحن" أو "اتصل بنا"
-Route::put('/info/{type}', [InfoController::class, 'update']); // ✅
+Route::post('/info', [InfoController::class, 'store']);        
+Route::get('/info/{type}', [InfoController::class, 'show']);   
+Route::put('/info/{type}', [InfoController::class, 'update']); 
 //
-Route::post('/contact', [ContactController::class, 'store']); // ✅ إرسال رسالة جديدة
-Route::get('/contact', [ContactController::class, 'index']);  // ✅ عرض جميع الرسائل (للمسؤول
+Route::post('/contact', [ContactController::class, 'store']); 
+Route::get('/contact', [ContactController::class, 'index']);  
 
 //
 Route::delete('/delete-account', [UserController::class, 'deleteAccount']);
@@ -90,70 +92,65 @@ Route::delete('/delete-address', [AddressController::class, 'deleteAddress']);
 //add,skip and show appointment
 
 Route::middleware('auth:sanctum')->group(function () {
-    //
-    Route::get('appointments/today', [AppointmentController::class, 'index']);
 
-    // إنشاء موعد جديد
-    Route::post('appointments', [AppointmentController::class, 'store']);
 
-    // تحديث حالة الموعد (taken أو skipped)
-    Route::put('appointments/{appointment}/status', [AppointmentController::class, 'updateStatus']);
-
-    Route::get('/categories', [CategoryController::class, 'index']);           // جلب جميع الفئات
-    Route::post('/categories', [CategoryController::class, 'store']);          // إنشاء فئة جديدة
-    Route::get('/categories/{id}', [CategoryController::class, 'show']);       // جلب فئة واحدة
-    Route::put('/categories/{id}', [CategoryController::class, 'update']);     // تحديث الفئة
-    Route::delete('/categories/{id}', [CategoryController::class, 'destroy']); // حذف الفئة
-
-    //
-
-    Route::get('/products', [ProductController::class, 'index']);           // جلب جميع المنتجات
-    Route::post('/products', [ProductController::class, 'store']);          // إضافة منتج جديد
-    Route::get('/products/{id}', [ProductController::class, 'show']);       // عرض منتج محدد
-    Route::put('/products/{id}', [ProductController::class, 'update']);     // تحديث المنتج
-    Route::delete('/products/{id}', [ProductController::class, 'destroy']); // حذف المنتج
-                                                                            //
-    Route::post('/cart/add', [CartController::class, 'addToCart']);
-
-    // 🛍️ جلب محتويات السلة
-    Route::get('/cart', [CartController::class, 'getCart']);
-
-    // 🔄 تحديث الكمية داخل السلة
-    Route::put('/cart/update', [CartController::class, 'updateQuantity']);
-
-    // ❌ حذف عنصر من السلة
-    Route::delete('/cart/remove/{cartId}', [CartController::class, 'removeFromCart']);
-
-                                                                         
-    Route::post('/order/place', [OrderController::class, 'placeOrder']); // تنفيذ الطلب
-                                                                         
-    Route::get('/orders/active', [OrderController::class, 'activeOrders']);
-    Route::get('/orders/past', [OrderController::class, 'pastOrders']);
-    //
-    Route::post("/user/update-profile", [UserController::class, "updateprofile"]);
-
-    //
-    Route::post('/change-password', [UserController::class, 'changePassword']);
-
-    //
-    Route::get('/payment-cards', [PaymentCardController::class, 'index']);
-    Route::post('/payment-cards', [PaymentCardController::class, 'store']);
-    Route::put('/payment-cards/{id}', [PaymentCardController::class, 'update']);
-    Route::delete('/payment-cards/{id}', [PaymentCardController::class, 'destroy']);
-
-                                                                              //
-    Route::post('/addresses', [AddressController::class, 'store']);           // إضافة عنوان جديد
-    Route::put('/addresses/{address}', [AddressController::class, 'update']); // تحديث عنوان موجود
-    Route::get('/addresses', [AddressController::class, 'getAddresses']);     // جلب العناوين الخاصة بالمستخدم
-
-    //
-    Route::post('/rate-driver', [DriverRatingController::class, 'rateDriver']);
-
-    //
-    Route::post('/confirm-delivery', [OrderDeliveryController::class, 'confirmDelivery']);
-
+   
+   
+   Route::put('/cart/update', [CartController::class, 'updateQuantity']);
+   
+   // ❌ حذف عنصر من السلة
+   Route::delete('/cart/remove/{cartId}', [CartController::class, 'removeFromCart']);
+   
+   
+   Route::post('/order/place', [OrderController::class, 'placeOrder']); 
+   
+   Route::get('/orders/active', [OrderController::class, 'activeOrders']);
+   Route::get('/orders/past', [OrderController::class, 'pastOrders']);
+   //
+   Route::post("/user/update-profile", [UserController::class, "updateprofile"]);
+   
+   //
+   
+   //
+   Route::get('/payment-cards', [PaymentCardController::class, 'index']);
+   Route::post('/payment-cards', [PaymentCardController::class, 'store']);
+   Route::put('/payment-cards/{id}', [PaymentCardController::class, 'update']);
+   Route::delete('/payment-cards/{id}', [PaymentCardController::class, 'destroy']);
+   
+   //
+   Route::post('/addresses', [AddressController::class, 'store']);          
+   Route::put('/addresses/{address}', [AddressController::class, 'update']); 
+   Route::get('/addresses', [AddressController::class, 'getAddresses']);     
+   
+   //
+   Route::post('/rate-driver', [DriverRatingController::class, 'rateDriver']);
+   
+   //
+   Route::post('/medications/{id}', [MedicationController::class, 'update']);
+   
+   Route::post('/cart/add', [CartController::class, 'addToCart']);
+   Route::get('/cart', [CartController::class, 'getCart']);
 });
 
+Route::post('/confirm-delivery', [OrderDeliveryController::class, 'confirmDelivery']);
+
+Route::get('/pharmacies', [MedicationController::class, 'getAllPharmacies']);    
+
+Route::post('/pharmacies', [PharmacyController::class, 'store']);
+
 //
+Route::post('/pharmacies/{id}', [PharmacyController::class, 'update']);
+Route::delete('/medications/{id}', [MedicationController::class, 'destroy']);
+Route::post('/contact/send', [ContactController::class, 'send']);
+
+Route::post('/assign-shared-image', [MedicationController::class, 'assignSharedImageToMedications']);
+
 
 // Route::post('/confirm-delivery', [OrderDeliveryController::class, 'confirmDelivery'])->middleware('auth:sanctum');
+
+Route::post('/change-password', [UserController::class, 'changePassword']);
+Route::get('/pharmacies/{id}/medications', [PharmacyController::class, 'getMedicationsByPharmacy']);
+
+Route::delete('/medications/{id}', [MedicationController::class, 'destroy']);
+
+

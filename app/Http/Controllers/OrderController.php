@@ -15,7 +15,7 @@ class OrderController extends Controller
         $request->validate([
             'address_id'     => 'required|exists:addresses,id',
             'voucher_code'   => 'nullable|string',
-            'payment_method' => 'required|string|in:COD,online', // الدفع عند الاستلام فقط
+            'payment_method' => 'required|string|in:COD,online', 
         ]);
 
         $user      = Auth::user();
@@ -25,12 +25,12 @@ class OrderController extends Controller
             return response()->json(['message' => 'السلة فارغة، لا يمكن تنفيذ الطلب'], 400);
         }
 
-        // حساب المجموع الفرعي
+        
         $subtotal = $cartItems->sum(fn($item) => $item->medication->price * $item->quantity);
         $discount = 0;
         $voucher  = null;
 
-        // التحقق من القسيمة وتطبيقها
+        
         if ($request->voucher_code) {
             $voucher = Voucher::where('code', $request->voucher_code)->first();
 
@@ -39,7 +39,7 @@ class OrderController extends Controller
                 ? $voucher->discount
                 : ($subtotal * ($voucher->discount / 100));
 
-                $voucher->increment('used_count'); // تحديث عدد مرات الاستخدام
+                $voucher->increment('used_count'); 
             } else {
                 return response()->json(['message' => 'القسيمة غير صالحة أو منتهية الصلاحية'], 400);
             }
@@ -47,7 +47,7 @@ class OrderController extends Controller
 
         $total = max(0, $subtotal - $discount);
 
-        // إنشاء الطلب
+        
         $order = Order::create([
             'user_id'        => $user->id,
             'address_id'     => $request->address_id,
@@ -55,11 +55,11 @@ class OrderController extends Controller
             'subtotal'       => $subtotal,
             'discount'       => $discount,
             'total'          => $total,
-            'payment_method' => $request->payment_method, // يختار المستخدم "COD" أو "Online"
-            'status'         => 'pending',                // الحالة الافتراضية
+            'payment_method' => $request->payment_method, 
+            'status'         => 'pending',                
         ]);
 
-        // تفريغ السلة بعد الطلب
+        
         Cart::where('user_id', $user->id)->delete();
 
         return response()->json([
@@ -72,7 +72,7 @@ class OrderController extends Controller
     {
         $user = Auth::user();
 
-        // جلب الطلبات النشطة ولكن تحديث حالة الطلبات القديمة تلقائيًا
+        
         $orders = Order::where('user_id', $user->id)
             ->where(function ($query) {
                 $query->where('status', 'pending')
@@ -94,13 +94,13 @@ class OrderController extends Controller
         ]);
     }
 
-    // ✅ جلب الطلبات السابقة (الطلبات المكتملة)
+    
 
     public function PastOrders()
     {
         $user = Auth::user();
     
-        // جلب الطلبات التي حالتها "delivered"
+        
         $pastOrders = Order::where('user_id', $user->id)
             ->where('status', 'delivered')
             ->orderBy('created_at', 'desc')
@@ -112,35 +112,5 @@ class OrderController extends Controller
         ]);
     }
     
-    public function confirmPayment(Request $request)
-    {
-        $request->validate([
-            'order_id'       => 'required|exists:orders,id',
-            'transaction_id' => 'required|string', // رقم عملية الدفع من بوابة الدفع
-        ]);
-
-        $order = Order::find($request->order_id);
-
-        if ($order->payment_method !== 'online') {
-            return response()->json(['message' => 'هذا الطلب ليس للدفع الإلكتروني!'], 400);
-        }
-
-        // تحديث حالة الطلب بعد الدفع الناجح
-        $order->update([
-            'status'         => 'paid',
-            'transaction_id' => $request->transaction_id, // تخزين رقم المعاملة
-        ]);
-
-        return response()->json(['message' => 'تم تأكيد الدفع بنجاح', 'order' => $order], 200);
-    }
-
-    /**
-     * التحقق من صلاحية القسيمة
-     */
-    private function isValidVoucher(Voucher $voucher)
-    {
-        return ($voucher->expiration_date === null || now()->lessThan($voucher->expiration_date))
-            && ($voucher->used_count < $voucher->usage_limit);
-    }
-
+  
 }

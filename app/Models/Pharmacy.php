@@ -5,10 +5,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Pharmacy extends Model
 {
-    protected $fillable = ['name', 'address', 'phone']; 
+    protected $fillable = ['name', 'address', 'phone','image']; 
 
     public function medications()
     {
-        return $this->belongsToMany(Medication::class)->withPivot('stock', 'price')->withTimestamps();
+        return $this->belongsToMany(Medication::class)->withPivot('stock')->withTimestamps();
     }
 }

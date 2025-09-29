@@ -1,7 +1,6 @@
 version: "3.8"
 
 services:
-    # PHP + Apache Service
     app:
         build:
             context: .
@@ -10,12 +9,13 @@ services:
         restart: unless-stopped
         working_dir: /var/www/html
         volumes:
-            - .:/var/www/html
+            - /root/media-max-project:/var/www/html
+            - /root/media-max-project/storage:/var/www/html/storage
         environment:
             - DB_HOST=db
             - DB_DATABASE=${DB_DATABASE:-mediamax}
-            - DB_USERNAME=${DB_USERNAME:-root}
-            - DB_PASSWORD=${DB_PASSWORD:-root}
+            - DB_USERNAME=${DB_USERNAME:-mediamax}
+            - DB_PASSWORD=${DB_PASSWORD:-mediamax}
             - REDIS_HOST=redis
         ports:
             - "8080:80"
@@ -32,7 +32,9 @@ services:
         restart: unless-stopped
         environment:
             MYSQL_DATABASE: ${DB_DATABASE:-mediamax}
-            MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-root}
+            MYSQL_USER: ${DB_USERNAME:-mediamax}
+            MYSQL_PASSWORD: ${DB_PASSWORD:-mediamax}
+            MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-mediamax}
             MYSQL_ALLOW_EMPTY_PASSWORD: "no"
             TZ: "Africa/Cairo"
         command: --default-authentication-plugin=mysql_native_password --wait_timeout=86400 --interactive_timeout=86400 --max_allowed_packet=1073741824

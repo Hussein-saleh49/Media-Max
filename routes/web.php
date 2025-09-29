@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\PasswordResetController;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SocialController;
 
@@ -35,6 +36,9 @@ Route::middleware([
 Route::get("/home",function(){
     return view("home");
 });
+
+
+
 
 
 

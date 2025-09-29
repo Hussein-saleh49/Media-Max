@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
 {
-    //
+    
     public function __invoke(LoginnRequest $request){
         $user = User::where("email",$request->email)->first();
         if(! $user ||! Hash::check($request->password,$user->password)){
@@ -19,7 +19,7 @@ class LoginController extends Controller
                 "message"=>"the provided credentials are incorrect"
             ],401);
         }
-        //
+        
         $user->tokens()->delete();
 
         $token = $user->createToken("authtoken")->plainTextToken;

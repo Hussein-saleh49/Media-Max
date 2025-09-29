@@ -11,6 +11,7 @@ class Medication extends Model
 
     protected $fillable = [
         'name',
+        'arabic_name',  
         'generic_name',
         'active_ingredient',
         'description',
@@ -18,6 +19,8 @@ class Medication extends Model
         'manufacturer',
         'dosage_form',
         'category',
+        'image',
+        'capsules_number',
         'search_count',
         'price',
     ];

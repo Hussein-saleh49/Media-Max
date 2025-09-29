@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 
 class CartController extends Controller
 {
-    // 🛒 إضافة دواء إلى السلة
+    // 
    public function addToCart(Request $request)
 {
     $request->validate([
@@ -17,17 +17,17 @@ class CartController extends Controller
         'quantity' => 'required|integer|min:1'
     ]);
 
-    // البحث عن العنصر في السلة للمستخدم الحالي
+    //
     $cartItem = Cart::where('user_id', auth()->id())
         ->where('medication_id', $request->medication_id)
         ->first();
 
     if ($cartItem) {
-        // تحديث الكمية يدويًا
+        
         $cartItem->quantity += $request->quantity;
         $cartItem->save();
     } else {
-        // إنشاء عنصر جديد في السلة
+    
         $cartItem = Cart::create([
             'user_id' => auth()->id(),
             'medication_id' => $request->medication_id,
@@ -38,26 +38,42 @@ class CartController extends Controller
     return response()->json(['message' => 'تمت إضافة الدواء إلى السلة', 'cart' => $cartItem]);
 }
 
-    // 🛍️ جلب السلة
-    public function getCart()
-    {
-        $cartItems = Cart::where('user_id', auth()->id())
-            ->with('medication') // جلب معلومات الدواء مع العنصر في السلة
-            ->get();
     
-        // حساب الإجمالي الفرعي (subtotal)
-        $subtotal = $cartItems->sum(function ($cartItem) {
-            return $cartItem->medication->price * $cartItem->quantity;
-        });
-    
-        return response()->json([
-            'cart' => $cartItems,
-            'subtotal' => number_format($subtotal, 2) // تحديد دقة الرقم العشري
-        ]);
-    }
-    
+   public function getCart()
+{
+    $cartItems = Cart::where('user_id', auth()->id())
+        ->with('medication') 
+        ->get();
 
-    // 🔄 تحديث الكمية
+    
+    $subtotal = $cartItems->sum(function ($cartItem) {
+        return $cartItem->medication->price * $cartItem->quantity;
+    });
+
+    
+    $cart = $cartItems->map(function ($item) {
+        return [
+            'id' => $item->id,
+            'quantity' => $item->quantity,
+            'medication' => [
+                'id' => $item->medication->id,
+                'name' => $item->medication->name,
+                'arabic_name' => $item->medication->arabic_name,
+                'price' => $item->medication->price,
+                'capsules_number' => $item->medication->capsules_number,
+                'image_url' => $item->medication->image ? url($item->medication->image) : null,
+            ],
+        ];
+    });
+
+    return response()->json([
+        'cart' => $cart,
+        'subtotal' => number_format($subtotal, 2)
+    ]);
+}
+
+
+    
     public function updateQuantity(Request $request)
     {
         $request->validate([
@@ -71,7 +87,7 @@ class CartController extends Controller
         return response()->json(['message' => 'تم تحديث الكمية', 'cart' => $cartItem]);
     }
 
-    // ❌ حذف عنصر من السلة
+    
     public function removeFromCart($cartId)
     {
         $cartItem = Cart::where('id', $cartId)->where('user_id', auth()->id())->firstOrFail();

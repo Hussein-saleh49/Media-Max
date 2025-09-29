@@ -1,35 +1,52 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
 use App\Models\ContactMessage;
 
 class ContactController extends Controller
 {
-    // ✅ إرسال رسالة جديدة
-    public function store(Request $request)
+    
+
+     public function send(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'message' => 'required|string|min:5'
+            'name' => 'required|string',
+            'message' => 'required|string',
         ]);
 
-        $contactMessage = ContactMessage::create([
-            'name' => $request->name,
-            'message' => $request->message
-        ]);
+        $data = [
+            'sender' => [
+                'name' => 'Media_Max',
+                'email' => 'husseinarfat49@gmail.com',
+            ],
+            'to' => [
+                [
+                    'email' => env('BREVO_TO_EMAIL'),
+                    'name' => 'Admin',
+                ]
+            ],
+            'subject' => 'New Message from User',
+            'htmlContent' => "
+                <h3>New message from: {$request->name}</h3>
+                <p>{$request->message}</p>
+            ",
+        ];
 
-        return response()->json([
-            'message' => 'تم إرسال الرسالة بنجاح!',
-            'contact_message' => $contactMessage
-        ], 201);
-    }
+        $response = Http::withHeaders([
+            'api-key' => env('BREVO_API_KEY'),
+            'accept' => 'application/json',
+            'content-type' => 'application/json',
+        ])->post('https://api.brevo.com/v3/smtp/email', $data);
 
-    // ✅ جلب جميع الرسائل (للمسؤول فقط)
-    public function index()
-    {
-        $messages = ContactMessage::latest()->get();
-        return response()->json($messages);
+        if ($response->successful()) {
+            return response()->json(['message' => 'Message sent successfully.']);
+        } else {
+            return response()->json([
+                'message' => 'Failed to send message.',
+                'error' => $response->body()
+            ], 500);
+        }
     }
 }

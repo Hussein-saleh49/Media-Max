@@ -17,15 +17,21 @@ class OtpMail extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct( $otp)
+    public function __construct($otp)
     {
-        
         $this->otp = $otp;
     }
-    public function build(){
-        return $this->subject('Your OTP Code')
-        ->view('emails.otp'); // تأكد من إنشاء العرض المناسب
-    }
+
+    /**
+     * Build the message.
+     */
+   public function build()
+{
+    return $this->subject('Your OTP Code')
+                ->view('emails.otp')
+                ->with(['otp' => $this->otp]);
+}
+
 
     /**
      * Get the message envelope.
